@@ -3,8 +3,7 @@ import argparse
 import src.prefileparser as file_parser
 
 def main(file_path: str):
-    data = file_parser.get_pre_file_data(file_path)
-    print(data)
+    data = file_parser.process_pre_data(file_path)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Reads a .pre file such that precipitation data can be transformed and uploaded to a SQLite database.')
