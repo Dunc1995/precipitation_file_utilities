@@ -2,6 +2,7 @@ import re
 import src.string_utilities as su
 import logging
 import src.variables as VAR
+import sqlite3
 
 class header():
     '''Contains the header information found in a .pre file.'''
@@ -20,7 +21,7 @@ class header():
                     i += 1
                 self.__setattr__(key_value_pair[0].lower().replace(' ', '_').replace(',', ''), key_value_pair[1])
             else:
-                logging.ERROR('Unable to process a key value pair: {}'.format(str(key_value_pair)))
+                logging.error('Unable to process a key value pair: {}'.format(str(key_value_pair)))
 
         self.year_range = self.__get_year_range()
 
@@ -41,11 +42,10 @@ class header():
                 raise Exception('Couldn\'t get two year elements from the following array: {}'.format(str(years)))
         except Exception as e:
             year_range = None
-            logging.CRITICAL('Unable to obtain date range! {}'.format(str(e)))
+            logging.critical('Unable to obtain date range! {}'.format(str(e)))
         return year_range
 
 class grid_data():
-    #TODO Could add some sanity check here for the precipitation data.
     '''Contains precipitation data as presented in a .pre file.'''
     def __init__(self, x_ref: int, y_ref: int, precipitation_data: list):
         self.x_ref = x_ref
@@ -68,10 +68,12 @@ class grid_data():
         if any(not len(data) == 12 for data in self.precipitation_data):
             logging.warning('Grid-ref: {},{} contains malformed data!'.format(self.x_ref, self.y_ref))
 
-class sql_data_row():
-    '''Object for the subsequent SQL data rows.'''
-    def __init__(self):
-        self.x_coord = None
-        self.y_coord = None
-        self.date = None
-        self.value = None
+class sql_db():
+    '''sqlite3 container'''
+    def __init__(self, database_name: str):
+        self.connection = sqlite3.connect(database_name)
+        self.cursor = self.connection.cursor()
+
+    def execute_many(self, command: str, data_array: list):
+        self.cursor.executemany(command, data_array)
+        

@@ -4,7 +4,8 @@ COMMA = ','
 EQUALS = '='
 LEFT_SQUARE_BRACKET = '['
 
-#region public split functions
+#? These wrappers would probably be more useful on a larger scale application.
+#region public split methods
 def split_by_newline(input: str):
     return __split(input, NEWLINE)
 

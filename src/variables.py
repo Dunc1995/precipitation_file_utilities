@@ -1,1 +1,2 @@
 HEADER_DATA = None
+GRID_DATA_ARRAY = []
