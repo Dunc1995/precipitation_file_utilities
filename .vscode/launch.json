@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "pre_file_utilities.py",
-            "args": ["-i", "~/Downloads/cru-ts-2-10.1991-2000-cutdown.pre"],
+            "args": ["-i", "./data/cru-ts-2-10.1991-2000-cutdown.pre", "-v", "1" ],
             "console": "integratedTerminal"
         }
     ]
