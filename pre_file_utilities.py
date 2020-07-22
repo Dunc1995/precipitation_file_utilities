@@ -6,7 +6,7 @@ import logging
 import json
 
 def main(file_path: str):
-    data = file_parser.process_pre_file_data(file_path)
+    data = file_parser.process_file(file_path)
     print(json.dumps(VAR.HEADER_DATA.__dict__, indent=4))
 
 if __name__ == "__main__":
