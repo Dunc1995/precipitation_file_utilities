@@ -2,7 +2,9 @@ NEWLINE = '\n'
 GRID_DELIMITER = 'Grid-ref='
 COMMA = ','
 EQUALS = '='
+LEFT_SQUARE_BRACKET = '['
 
+#region public split functions
 def split_by_newline(input: str):
     return __split(input, NEWLINE)
 
@@ -15,8 +17,12 @@ def split_by_equals(input: str):
 def split_by_comma(input: str):
     return __split(input, COMMA)
 
+def split_by_left_square_bracket(input: str):
+    return __split(input, LEFT_SQUARE_BRACKET)
+
 def split_default(input: str):
     return __split(input)
+#endregion
 
 def __split(input: str, delimiter: str = None):
     '''Wrapper for the str().split() method.'''

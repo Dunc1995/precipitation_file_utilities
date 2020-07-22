@@ -2,6 +2,7 @@ from os.path import exists
 from src.data_objects import header, grid_data
 import src.string_utilities as su
 from src.string_utilities import get_first_array_element, get_integer_array
+import src.variables as VAR
 import json
 import logging
 
@@ -13,8 +14,7 @@ def process_pre_file_data(file_path: str):
     
     #? Separate file header from the grid data
     file_header_string, grid_string_array = get_first_array_element(su.split_by_grid_reference(file_contents))
-    test = header(file_header_string)
-
+    VAR.HEADER_DATA = header(file_header_string)
 
     for grid_string in grid_string_array:
         #? Separate coordinate string from precipitation data
@@ -26,7 +26,7 @@ def process_pre_file_data(file_path: str):
         for pre_string in precipitation_string_array:
             raw_string_array = su.split_default(pre_string)
             
-            if len(raw_string_array) == 12: #TODO Add sanity checks to the grid_data class instead of here.
+            if len(raw_string_array) > 0: #TODO Add sanity checks to the grid_data class instead of here.
                 precipitation_integer_array = get_integer_array(raw_string_array) #* Integer array for 1 year of precipitation data
                 annual_precipitation_array.append(precipitation_integer_array)
             else:
