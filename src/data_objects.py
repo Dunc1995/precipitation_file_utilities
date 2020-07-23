@@ -51,29 +51,68 @@ class grid_data():
         self.x_ref = x_ref
         self.y_ref = y_ref
         self.precipitation_data = precipitation_data
-        self.valid_set = False
+        self.is_year_range_valid = False
+        self.is_full_annual_set = False
+        self.is_complete_dataset = False
 
         if not VAR.HEADER_DATA == None:
-            self.validate_precipitation_data(len(VAR.HEADER_DATA.year_range))
+            self.__validate_precipitation_data(len(VAR.HEADER_DATA.year_range))
         else:
             logging.critical('VAR.HEADER_DATA from variables.py was found to be NoneType when attempting to validate grid data.')
             raise Exception('Header data should be set upstream before attempting to validate grid data!')
 
-    def validate_precipitation_data(self, length: int):
+    def get_monthly_rainfall_data(self):
+        '''Collates all monthly rainfall data into the tuple format required for the database.'''
+        data_rows = []
+        i = 0
+        if self.is_complete_dataset:
+            for year in self.precipitation_data:
+                j = 1
+                year_value = VAR.HEADER_DATA.year_range[i]
+                for value in year:
+                    month = j
+                    month_value = "{:02d}".format(month)
+                    date = "01/{}/{}".format(month_value, year_value)
+                    row = ( self.x_ref, self.y_ref, date, value )
+                    data_rows.append(row)
+                    j += 1
+                i += 1
+        
+        if not self.is_year_range_valid:
+            logging.warning('Ignored Gridref {},{} because of a mismatch between the year range and the given dataset.'.format(self.x_ref, self.y_ref))
+        #TODO Make this functionality optional
+        if not self.is_full_annual_set:
+            logging.warning('Ignored Gridref {},{} because 12 months of data was expected before insertion into the database.'.format(self.x_ref, self.y_ref))
+        return data_rows
+
+    def __validate_precipitation_data(self, length: int):
+        '''Checks for bad data in the grid and updates its boolean checks accordingly.'''
         if len(self.precipitation_data) == length:
-            self.valid_set = True
+            self.is_year_range_valid = True
         else:
             logging.warning('Grid-ref: {},{} - precipitation data array (length {}) does not match the year range in the .pre file!'.format(self.x_ref, self.y_ref, len(self.precipitation_data)))
 
         if any(not len(data) == 12 for data in self.precipitation_data):
             logging.warning('Grid-ref: {},{} contains malformed data!'.format(self.x_ref, self.y_ref))
+        else:
+            self.is_full_annual_set = True
+        
+        if self.is_full_annual_set and self.is_year_range_valid:
+            self.is_complete_dataset = True
 
 class sql_db():
     '''sqlite3 container'''
+    #TODO Prototype db as proof of concept - would be straightforward to alter this to work with a SQL server.
     def __init__(self, database_name: str):
         self.connection = sqlite3.connect(database_name)
         self.cursor = self.connection.cursor()
 
-    def execute_many(self, command: str, data_array: list):
-        self.cursor.executemany(command, data_array)
-        
+    def create_precipitation_data_table(self):
+        '''Creates the Precipitation_Data table if it does not already exist.'''
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS Precipitation_Data ( Xref integer, Yref integer, Date text, Value integer )''')
+        self.connection.commit()
+
+    def insert_data_array(self, data_array: list):
+        self.cursor.execute("BEGIN TRANSACTION;")
+        self.cursor.executemany('INSERT INTO Precipitation_Data VALUES (?,?,?,?)', data_array)
+        self.cursor.execute("COMMIT;")
