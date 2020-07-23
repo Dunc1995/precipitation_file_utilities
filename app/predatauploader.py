@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 import argparse
+import logging
+import json
 import src.parser as file_parser
 import src.variables as VAR
 from src.objects import sql_db
-import logging
-import json
 
 def main(file_path: str):
     data_is_parsed = file_parser.process_file(file_path)
