@@ -8,7 +8,7 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "pre_file_utilities.py",
+            "program": "predatauploader.py",
             "args": ["-i", "./data/cru-ts-2-10.1991-2000-cutdown.pre", "-v", "2" ],
             "console": "integratedTerminal"
         }
