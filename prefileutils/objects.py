@@ -1,8 +1,8 @@
 import re
 import logging
 import sqlite3
-import app.variables as VAR
-import app.stringutils as su
+import prefileutils.variables as VAR
+import prefileutils.stringutils as su
 
 class header():
     '''Contains the header information found in a .pre file.'''

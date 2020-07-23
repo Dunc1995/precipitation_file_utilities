@@ -1,10 +1,10 @@
 from os.path import exists
 import json
 import logging
-from app.objects import header, grid_data
-import app.stringutils as su
-from app.stringutils import get_first_array_element, get_integer_array
-import app.variables as VAR
+from prefileutils.objects import header, grid_data
+import prefileutils.stringutils as su
+from prefileutils.stringutils import get_first_array_element, get_integer_array
+import prefileutils.variables as VAR
 
 def process_file(file_path: str):
     '''Attempts to parse a .pre file header and its grid reference blocks. Returns false if the process fails.'''
