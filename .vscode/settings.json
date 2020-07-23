@@ -1,4 +1,3 @@
 {
-    "python.pythonPath": "env/bin/python",
-    "python.autoComplete.extraPaths": ["./src"]
+    "python.pythonPath": "env/bin/python"
 }
