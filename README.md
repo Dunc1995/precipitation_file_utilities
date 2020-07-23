@@ -30,7 +30,8 @@ python setup.py sdist
 Provided there are no errors, a new `./dist/<file>.tar.gz` file should have been created - we can then use this file for installation in the next section.
 
 ## 3.0 - Installation
-> These instructions outline how to install the script on a Linux OS. On Windows, the same process will instead generate a `.exe` file which can be used in the same manner. However note that on Windows the the prefileutils.exe file must be in the same directory as the `prefileutils-script.py`.
+> These instructions outline how to install the script on a Linux OS. On Windows, the same process will instead generate a `.exe` file which can be used in the same manner. However note that on Windows the the prefileutils.exe file must be in the same directory as the `prefileutils-script.py`.  
+
 It's probably best to test this script in isolation. I would recommend creating a new directory, then extracting the archive file from section 1.0 into this directory as follows:
 ```python
 ./test_directory/extracted-package-directory
