@@ -8,8 +8,9 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "run.py",
+            "program": "prefileutils",
             "args": ["-i", "./data/cru-ts-2-10.1991-2000-cutdown.pre", "-v", "2" ],
+            "env": { "PYTHONPATH": "${workspaceRoot}" }
             "console": "integratedTerminal"
         }
     ]

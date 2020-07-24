@@ -21,11 +21,16 @@ def main():
 
     data_is_parsed = fp.process_file(args.input_file_path)
     if data_is_parsed == True:
+        i = 1
+        total = len(VAR.GRID_DATA_ARRAY)
         db = sql_db('./data/precipitationdata.db')
         db.create_precipitation_data_table()
         for grid in VAR.GRID_DATA_ARRAY:
-            logging.info('Uploading data for Gridref {},{}'.format(grid.x_ref, grid.y_ref))
+            message = 'Uploading data for Gridref {},{} ({} of {})'.format(grid.x_ref, grid.y_ref, i, total)
+            print(message)
+            logging.info(message)
             db.insert_data_array(grid.get_monthly_rainfall_data())
+            i += 1
 
 if __name__ == "__main__":
     main()
